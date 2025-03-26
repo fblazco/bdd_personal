@@ -5,12 +5,11 @@
  * Documentacion:
  * https://www.php.net/manual/es/function.implode.php
  */
-        require "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/E0/archivos/funciones.php";
-        $archv_user_resc   = "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/E0/CSV_sucios/usuarios_rescatados.csv";
-        $archv_traba_resc  = "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/E0/CSV_sucios/empleados_rescatados.csv";
+        require "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/archivos/funciones.php";
+        $archv_user_resc   = "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_sucios/usuarios_rescatados.csv";
+        $archv_traba_resc  = "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_sucios/empleados_rescatados.csv";
         if (($archivo = fopen($archv_user_resc, "r")) !== FALSE){
-                echo "archivo usuarios existe";
-                $archivo_OK_user= "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/E0/CSV_limpios/usuarios_OK.csv";
+                $archivo_OK_user= "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_limpios/usuarios_OK.csv";
                 $archivo_correcto1 = fopen($archivo_OK_user, "w");
                 $arr_inicial = ["nombre", "run", "Dv", "Correo", "Nombre_usuario", "Contrasena", 
                 "Telefono_contacto", "Puntos", "Codigo_agenda", "Etiqueta", "Codigo_reserva", "Fecha", "Monto", "Cantidad_personas"];                                
@@ -30,8 +29,7 @@
                 echo "archivo usuarios rescatados no existe";
         }
         if (($archivo_2 = fopen($archv_traba_resc, "r")) !== FALSE){
-                echo "archivo trabajadores rescatados existe";
-                $archivo_OK_traba = "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/E0/CSV_limpios/empleados_OK.csv";
+                $archivo_OK_traba = "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_limpios/empleados_OK.csv";
                 $archivo_correcto2 = fopen($archivo_OK_traba, "w");
                 $arr_inicial2 = ["nombre", "run", "Dv", "Correo", "Nombre_usuario", "Contrasena", 
                 "Telefono_contacto", "Jornada", "Isapre", "Contrato", "Codigo_reserva", 
@@ -42,12 +40,12 @@
                 fputcsv($archivo_correcto2, $arr_inicial2, ",", '"', "\\");
                 while (($fila2 = fgetcsv($archivo_2 , NULL, ",", '"', "\\")) !== FALSE){
                         //print_r($fila);
-                        /*
+                        
                         $arr_correcto2 = parse_empleados($fila2);
                         if ($arr_correcto2 != ""){
                                 fputcsv($archivo_correcto2, $arr_correcto2, ",", '"', "\\");
                         }
-                                */
+                                
                        
 
                 }

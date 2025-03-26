@@ -6,7 +6,25 @@
  */
 $arreglo_codigos_agenda=[];
 $arreglo_codigos_reserva=[];
-    // USUARIOS 
+$archivo_mal1= "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_limpios/datos_descartados_usuarios.csv";
+$archivo_mal_usuarios = fopen($archivo_mal1, "w");
+$arr_inicial = ["nombre", "run", "Dv", "Correo", "Nombre_usuario", "Contrasena", 
+"Telefono_contacto", "Puntos", "Codigo_agenda", "Etiqueta", "Codigo_reserva", 
+"Fecha", "Monto", "Cantidad_personas"];                                
+fputcsv($archivo_mal_usuarios, $arr_inicial, ",", '"', "\\");
+
+$archivo_mal2= "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_limpios/datos_descartados_empleados.csv";
+$archivo_mal_empleados = fopen($archivo_mal2, "w");
+$arr_inicial2 = ["nombre", "run", "Dv", "Correo", "Nombre_usuario", "Contrasena", 
+"Telefono_contacto", "Jornada", "Isapre", "Contrato", "Codigo_reserva", 
+"Codigo_agenda", "Fecha", "Monto", "Cantidad_personas", "Estado_disponibilidad", 
+"Numero_viaje", "Lugar_origen", "Lugar_llegada", "Fecha_salida", "Fecha_llegada",
+"Capacidad", "Tiempo_estimado", "Precio_asiento", "Empresa", "Tipo_de_bus",
+"Comodidades", "Escalas", "Clase", "Paradas"];                                
+fputcsv($archivo_mal_empleados, $arr_inicial2, ",", '"', "\\");
+     
+
+// USUARIOS 
 function parse_nombre($str){
     /**Nombre 
     * Consideraciones:
@@ -291,6 +309,7 @@ function parse_usuarios($arr){
     $arr_correcto = [];
     $arr_malo = [];
     $correctitud = TRUE;
+    global $archivo_mal_usuarios;
 
     $bool_nombre = parse_nombre($arr[0]);
     # checkeo que ni rut ni dv sean nulos, en caso que esto ocurra checkeo si es rut
@@ -312,7 +331,7 @@ function parse_usuarios($arr){
         //echo "NOMBRE: $bool_nombre\n";
         array_push($arr_correcto, $bool_nombre);
     }else{
-        echo "NOMBRE: mal\n"; $correctitud = FALSE; array_push($arr_malo,$bool_nombre);} 
+        echo "NOMBRE: mal\n"; $correctitud = FALSE; array_push($arr_correcto,"");} 
 
     if ($bool_rut != FALSE AND $bool_dv != FALSE){   
         $is_rut = confirm_rut($bool_rut, $bool_dv);
@@ -320,68 +339,71 @@ function parse_usuarios($arr){
             //echo "RUT: $bool_rut-$bool_dv \n";
             array_push($arr_correcto, $bool_rut);
             array_push($arr_correcto, $bool_dv);
-        }}else{echo "RUT: mal\n";$correctitud = FALSE; array_push($arr_malo, $bool_rut);}# lo meto en el archivo de error y salgo de la funcion
+        }}else{echo "RUT: mal\n";$correctitud = FALSE; array_push($arr_correcto,""); 
+            array_push($arr_correcto,"");} #lo meto en el archivo de error y salgo de la funcion
+
 
     if ($bool_correo !== FALSE){
         //echo "CORREO: $bool_correo\n";
         array_push($arr_correcto, $bool_correo);
-    } else{echo "CORREO: mal\n"; $correctitud = FALSE; } 
+    } else{echo "CORREO: mal\n"; $correctitud = FALSE; array_push($arr_correcto,"");} 
 
     if ($bool_username !== FALSE){
         //echo "USERNAME: $bool_username\n";
         array_push($arr_correcto, $bool_username);
-    }else{echo "USERNAME: mal\n"; $correctitud = FALSE;}
+    }else{echo "USERNAME: mal\n"; $correctitud = FALSE; array_push($arr_correcto,"");}
 
     if ($bool_contrasena !== FALSE){
         //echo "PASSWORD: $bool_contrasena\n";
         array_push($arr_correcto, $bool_contrasena);
-    }else{echo "PASSWORD: mal\n";$correctitud = FALSE;}
+    }else{echo "PASSWORD: mal\n";$correctitud = FALSE;array_push($arr_correcto,"");}
 
     
     if ($bool_telefono !== FALSE){
         //echo "TELEFONO: $bool_telefono\n";
         array_push($arr_correcto, $bool_telefono);
-    }else{echo "TELEFONO: mal\n";$correctitud = FALSE;}
+    }else{echo "TELEFONO: mal\n";$correctitud = FALSE;array_push($arr_correcto,"");}
 
     if ($bool_puntos !== FALSE){
         //echo "PUNTOS: $bool_puntos\n";
         array_push($arr_correcto, $bool_puntos);
-    }else{echo "PUNTOS: mal\n";$correctitud = FALSE;}
+    }else{echo "PUNTOS: mal\n";$correctitud = FALSE;array_push($arr_correcto,"");}
 
     if ($bool_codigo_agenda !== FALSE){
         //echo "CODIGO AGENDA: $bool_codigo_agenda\n";
         array_push($arr_correcto, $bool_codigo_agenda);
-    }else{echo "CODIGO AGENDA: mal\n";$correctitud = FALSE;}
+    }else{echo "CODIGO AGENDA: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
 
     if ($bool_etiqueta !== FALSE){ #preguntar si hay que hacer algun filtro con etiqueta u otros
         //echo "ETIQUETA: $bool_etiqueta\n";
         array_push($arr_correcto, $bool_etiqueta);
-    }else{echo "etiqueta: mal\n";$correctitud = FALSE;}
+    }else{echo "etiqueta: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
 
     if ($bool_codigo_reserva !== FALSE){
         //echo "CODIGO RESERVA: $bool_codigo_reserva\n";
         array_push($arr_correcto, $bool_codigo_reserva);
-    }else{echo "CODIGO RESERVA: mal\n";$correctitud = FALSE;}
+    }else{echo "CODIGO RESERVA: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
 
     if ($bool_fecha !== FALSE){
         //echo "FECHA: $bool_fecha\n";
         array_push($arr_correcto, $bool_fecha);
-    }else{echo "FECHA: mal\n";$correctitud = FALSE;}
+    }else{echo "FECHA: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
 
     if ($bool_monto !== FALSE){
         //echo "MONTO: $bool_monto\n";
         array_push($arr_correcto, $bool_monto);
-    }else{echo "MONTO: mal\n";$correctitud = FALSE;}
+    }else{echo "MONTO: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
 
     if ($bool_cantidad_personas !== FALSE){
         //echo "CANTIDAD PERSONAS: $bool_cantidad_personas\n";
         array_push($arr_correcto, $bool_cantidad_personas);
-    }else{echo "CANTIDAD PERSONAS: mal\n";$correctitud = FALSE;}
+    }else{echo "CANTIDAD PERSONAS: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
 
     //var_dump($arr_correcto);
-    if ($correctitud == FALSE){
-        $arr_malo = $arr_correcto;
-        var_dump($arr_malo);
+    if ($correctitud === FALSE){
+
+        fputcsv($archivo_mal_usuarios, $arr_correcto, ",", '"', "\\");
+            
         return "";
     }else{
         return $arr_correcto;
@@ -700,6 +722,8 @@ function parse_empleados($arr){
      * Algunos datos usan funciones que se usaron para limpiar usuarios_rescatados.csv
      * Documentacion:
      */
+    global $archivo_mal_empleados;
+
     $correctitud = TRUE;
     $arr_correcto =[];
     $bool_nombre_empleado=parse_nombre($arr[0]);
@@ -739,7 +763,7 @@ function parse_empleados($arr){
     if ($bool_nombre_empleado !== FALSE){
         //echo "NOMBRE empleado: $bool_nombre_empleado\n";
         array_push($arr_correcto, $bool_nombre_empleado);
-    }else{echo "NOMBRE empleado mal\n";$correctitud = FALSE;}
+    }else{echo "NOMBRE empleado mal\n";$correctitud = FALSE; array_push($arr_correcto, "");}
 
     if ($bool_rut_empleado != FALSE AND $bool_dv_empleado != FALSE){   
         $is_rut = confirm_rut($bool_rut_empleado, $bool_dv_empleado);
@@ -747,145 +771,146 @@ function parse_empleados($arr){
             //echo "RUT: $bool_rut_empleado-$bool_dv_empleado \n";
             array_push($arr_correcto, $bool_rut_empleado);
             array_push($arr_correcto, $bool_dv_empleado);
-        }}else{echo "RUT: mal\n";$correctitud = FALSE;}# lo meto en el archivo de error y salgo de la funcion
+        }}else{echo "RUT: mal\n";$correctitud = FALSE;array_push($arr_correcto, "");array_push($arr_correcto, "");}# lo meto en el archivo de error y salgo de la funcion
     
     if ($bool_correo_empleado !== FALSE){
         //echo "CORREO empleado: $bool_correo_empleado\n";
         array_push($arr_correcto, $bool_correo_empleado);
-    } else{echo "CORREO empleado mal\n";$correctitud = FALSE;}
+    } else{echo "CORREO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_username_empleado !== FALSE){
         //echo "USERNAME empleado: $bool_username_empleado\n";
         array_push($arr_correcto, $bool_username_empleado);
-    }else{echo "USERNAME empleado mal\n";$correctitud = FALSE;}
+    }else{echo "USERNAME empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_contrasena_empleado !== FALSE){
         //echo "contrasena empleado: $bool_contrasena_empleado\n";
         array_push($arr_correcto, $bool_contrasena_empleado);
-    }else{echo "contrasena mal\n";$correctitud = FALSE;}
+    }else{echo "contrasena mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
     
     if ($bool_telefono_empleado !== FALSE){
         //echo "TELEFONO empleado: $bool_telefono_empleado\n";
         array_push($arr_correcto, $bool_telefono_empleado);
-    }else{echo "TELEFONO empleado mal\n";$correctitud = FALSE;}
+    }else{echo "TELEFONO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_jornada_empleado !== FALSE){
        //echo "JORNADA empleado: $bool_jornada_empleado\n";
        array_push($arr_correcto, $bool_jornada_empleado);
-    }else{echo "JORNADA empleado mal\n";$correctitud = FALSE;}
+    }else{echo "JORNADA empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_isapre_empleado !== FALSE){
         //echo "ISAPRE empleado: $bool_isapre_empleado\n";
         array_push($arr_correcto, $bool_isapre_empleado);
-    }else{echo "ISAPRE empleado mal\n";$correctitud = FALSE;}
+    }else{echo "ISAPRE empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_contrato_empleado !== FALSE){
         //echo "CONTRATO empleado: $bool_contrato_empleado\n";
         array_push($arr_correcto, $bool_contrato_empleado);
-    }else{echo "CONTRATO empleado mal\n";$correctitud = FALSE;}
+    }else{echo "CONTRATO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_codigo_reserva_empleado !== FALSE){
         //echo "CODIGO RESERVA: $bool_codigo_reserva_empleado\n";
         array_push($arr_correcto, $bool_codigo_reserva_empleado);
-    }else{echo "CODIGO RESERVA mal\n";$correctitud = FALSE;} 
+    }else{echo "CODIGO RESERVA mal\n";$correctitud = FALSE;array_push($arr_correcto, "");} 
 
     if ($bool_codigo_agenda_empleado !== FALSE){
         //echo "CODIGO AGENDA: $bool_codigo_agenda_empleado\n";
         array_push($arr_correcto, $bool_codigo_agenda_empleado);
-    }else{echo "CODIGO AGENDA mal\n";$correctitud = FALSE;}
+    }else{echo "CODIGO AGENDA mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_fecha_empleado !== FALSE){
         //echo "FECHA empleado: $bool_fecha_empleado\n";
         array_push($arr_correcto, $bool_fecha_empleado);
-    }else{echo "FECHA empleado mal\n";$correctitud = FALSE;}
+    }else{echo "FECHA empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_monto_empleado !== FALSE){
         //echo "MONTO empleado: $bool_monto_empleado\n";
         array_push($arr_correcto, $bool_monto_empleado);
-    }else{echo "MONTO empleado mal\n";$correctitud = FALSE;}
+    }else{echo "MONTO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_cantidad_personas_empleado !== FALSE){
         //echo "CANTIDAD PERSONAS: $bool_cantidad_personas_empleado\n";
         array_push($arr_correcto, $bool_cantidad_personas_empleado);
-    }else{echo "CANTIDAD PERSONAS mal\n";$correctitud = FALSE;}
+    }else{echo "CANTIDAD PERSONAS mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_estado_disponibilidad_empleado !== FALSE){
         //echo "ESTADO DISPONIBILIDAD empleado: $bool_estado_disponibilidad_empleado\n";
         array_push($arr_correcto, $bool_estado_disponibilidad_empleado);
-    }else{echo "ESTADP DISPONIBILIDAD empleado mal\n";$correctitud = FALSE;}
+    }else{echo "ESTADP DISPONIBILIDAD empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_numero_viaje_empleado !== FALSE){
         //echo "NUMERO VIAJE empelado: $bool_numero_viaje_empleado\n";
         array_push($arr_correcto, $bool_numero_viaje_empleado);
-    }else{echo "NUMERO VIAJE empleado mal\n";$correctitud = FALSE;}
+    }else{echo "NUMERO VIAJE empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_lugar_origen_empleado !== FALSE){
        //echo "lugar origen empleado: $bool_lugar_origen_empleado\n";
        array_push($arr_correcto, $bool_lugar_origen_empleado);
-    }else{echo "lugar origen mal\n";$correctitud = FALSE;}
+    }else{echo "lugar origen mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_lugar_llegada_empleado !== FALSE){
         //echo "lugar llegada empleado: $bool_lugar_llegada_empleado\n";
         array_push($arr_correcto, $bool_lugar_llegada_empleado);
-    }else{echo "lugar llegada empleado mal\n";$correctitud = FALSE;}
+    }else{echo "lugar llegada empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_fecha_salida_empleado !== FALSE){
         //echo "fecha salida empleado: $bool_fecha_salida_empleado\n";
         array_push($arr_correcto, $bool_fecha_salida_empleado);
-    }else{echo "fecha salida empleado: mal\n";$correctitud = FALSE;}
+    }else{echo "fecha salida empleado: mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_fecha_llegada_empleado !== FALSE){
         //echo "fecha llegada empleado: $bool_fecha_llegada_empleado\n";
         array_push($arr_correcto, $bool_fecha_llegada_empleado);
-    }else{echo "fecha llegada empleado: mal\n";$correctitud = FALSE;}
+    }else{echo "fecha llegada empleado: mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_capacidad_empleado !== FALSE){
         //echo "capacidad empleado: $bool_capacidad_empleado\n";
         array_push($arr_correcto, $bool_capacidad_empleado);
-    }else{echo "capacidad empleado mal\n";$correctitud = FALSE;}
+    }else{echo "capacidad empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_tiempo_estimado_empleado !== FALSE){
         //echo "tiempo estimado empleado: $bool_tiempo_estimado_empleado\n";
         array_push($arr_correcto, $bool_tiempo_estimado_empleado);
-    }else{echo "tiempo estimado empleado mal\n";$correctitud = FALSE;}
+    }else{echo "tiempo estimado empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_precio_asiento !== FALSE){
         //echo "precio asiento: $bool_precio_asiento\n";
         array_push($arr_correcto, $bool_precio_asiento);
-    }else{echo "precio asiento mal\n";$correctitud = FALSE;}
+    }else{echo "precio asiento mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_empresa_empleado !== FALSE){
         //echo "empresa empleado: $bool_empresa_empleado\n";
         array_push($arr_correcto, $bool_empresa_empleado);
-    }else{echo "empresa empleado mal\n";$correctitud = FALSE;}
+    }else{echo "empresa empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_tipo_bus_empleado !== FALSE){
         //echo "tipo bus empleado: $bool_tipo_bus_empleado\n";
         array_push($arr_correcto, $bool_tipo_bus_empleado);
-    }else{echo "tipo bus mal $bool_tipo_bus_empleado\n";$correctitud = FALSE;}
+    }else{echo "tipo bus mal $bool_tipo_bus_empleado\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_comodidades_empleado !== FALSE){
         //echo "comodidades empleado: $bool_comodidades_empleado\n";
         array_push($arr_correcto, $bool_comodidades_empleado);
-    }else{echo "comodidades empleado mal\n";$correctitud = FALSE;}
+    }else{echo "comodidades empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_escalas_empleado !== FALSE){
         //echo "escalas empleado: $bool_escalas_empleado\n";
         array_push($arr_correcto, $bool_escalas_empleado);
-    }else{echo "escalas empleado mal\n";$correctitud = FALSE;}
+    }else{echo "escalas empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_clase_empleado !== FALSE){
         //echo "clase empleado: $bool_clase_empleado\n";
         array_push($arr_correcto, $bool_clase_empleado);
-    }else{echo "clase empleado mal\n";$correctitud = FALSE;}
+    }else{echo "clase empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     if ($bool_paradas_empleado !== FALSE){
         //echo "paradas empleado: $bool_paradas_empleado\n";
         array_push($arr_correcto, $bool_paradas_empleado);
-    }else{echo "paradas empleado mal\n";$correctitud = FALSE;}
+    }else{echo "paradas empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
 
     //var_dump($arr_correcto);
     if ($correctitud == FALSE){
+        fputcsv($archivo_mal_empleados, $arr_correcto, ",", '"', "\\");
         return "";
     }else{
         return $arr_correcto;
