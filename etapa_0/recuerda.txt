@@ -1,0 +1,97 @@
+-Archivos Esperados:
+    (Ademas hay que generar en CSV_limpios 2 archivos de datos descartados
+    datos_descartados_usuarios.csv y datos_descartados_empleados.csv)
+    Personas:
+        -Nombre
+        -Rut
+        -DV
+        -Correo
+        -Contraseña
+        -Nombre Usuario
+        -Telefono de Contacto
+    Usuarios:
+        -Nombre
+        -Rut
+        -DV
+        -Correo
+        -Contraseña
+        -Nombre Usuario
+        -Telefono Contacto
+        -Puntos
+    Empleados:
+        -Nombre
+        -Rut
+        -DV
+        -Correo
+        -Contraseña
+        -Nombre Usuario
+        -Telefono de Contacto
+        -Jornada
+        -Isapre
+        -Contrato
+    Agenda:
+        -Correo Usuario
+        -Codigo Agenda
+        -Etiqueta
+        -Fecha de Creacion
+    Reservas:
+        -Codigo Agenda
+        -Codigo Reservas
+        -Fecha
+        -Monto
+        -Cantidad Personas
+        -Estado Disponibilidad
+    Transportes:
+        -Correo Empleado
+        -Codigo Reserva
+        -Numero de Viaje
+        -Lugar Origen
+        -Lugar Llegada
+        -Capacidad
+        -Tiempo Estimado
+        -Precio Asiento
+        -Empresa
+        -Fecha Salida
+        -Fecha Llegada
+    Buses:
+        -Correo Empleado
+        -Codigo Reserva
+        -Numero de Viaje
+        -Lugar Origen
+        -Lugar Llegada
+        -Capacidad
+        -Tiempo Estimado
+        -Precio Asiento
+        -Empresa
+        -Tipo 
+        -Comodidades
+        -Fecha Salida
+        -Fecha Llegada
+    Trenes:
+        -Correo Empleado
+        -Codigo Reserva
+        -Numero Viaje
+        -Lugar Origen
+        -Lugar Llegada
+        -Capacidad
+        -Tiempo Estimado
+        -Precio Asiento
+        -Empresa
+        -Comodidades
+        -Paradas
+        -Fecha Salida
+        -Fecha Llegada
+    Aviones:
+        -Correo Empleado
+        -Codigo Reserva
+        -Numero de Viaje
+        -Lugar Origen
+        -Lugar Llegada
+        -Capacidad
+        -Tiempo Estimado
+        -Precio Asiento
+        -Empresa
+        -Escalas
+        -Clase
+        -Fecha Salida
+        -Fecha Llegada

@@ -1,0 +1,20 @@
+*1ro usuariosOK se hace con usuarios_rescatados
+*2do agendasOK se hace con usuarios_rescatados
+*3ro todos los archivos que se generan a partir de trabajadores se hace con empleados_rescatados
+*4to personasOK se genera con tnato empleados_rescatados como con usuarios_rescatados, para generarlo
+leere usuarios_rescatados generando los puntos *1 y *2 y guardandolo en personasOK, despues personasOK continuera
+llenandose cuando se lleve a cabo el punto *4
+
+*1
+-Leo el archivo usuarios_rescatados en main y lo envio a la funcion parse_usuarios ahi se limpia y
+evalua cada atributo de un usuario. Con que un atributo este mal el dato queda descartado *por el momento*
+existe la posibilidad de corroborar el dato a la hora de lee empleados_rescatados, por lo tanto se deja el dato en un
+archivo temporal de errores_temp.csv 
+-Cuando se lea empleados_rescatados en el punto *4 se revisara si el dato coincide al de error y se volveran a agregar 
+en usuariosOK y en agendasOK. Esto tambien se hara de manera inversa a la hora de leer empleados_rescatados.
+
+
+
+TODO:
+-falta meter las cosas malas en un archivo de errores
+-falta hacer todas las funciones para limpiar empleados
