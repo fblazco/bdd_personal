@@ -16,5 +16,60 @@ en usuariosOK y en agendasOK. Esto tambien se hara de manera inversa a la hora d
 
 
 TODO:
--falta meter las cosas malas en un archivo de errores
--falta hacer todas las funciones para limpiar empleados
+DONE-falta meter las cosas malas en un archivo de errores
+DONE-falta hacer todas las funciones para limpiar empleados
+-falta revisar colisiones en los archivos de datos descartados
+-falta meter los datos limpios en los diversos archivos
+[29-03-25, 5:19:53 p. m.] Felipe (u) 🥶: agendas me quedan exactamente 6500
+[29-03-25, 5:20:08 p. m.] Felipe (u) 🥶: y usuarios 3723
+[29-03-25, 5:20:21 p. m.] Felipe (u) 🥶: personas 5707
+[29-03-25, 5:20:34 p. m.] Felipe (u) 🥶: empleados 1985
+
+ $correctitud = TRUE;
+    $arr_correcto =[];
+    $bool_nombre_empleado=($arr[0]);
+    $bool_rut_empleado = ($arr[1]);
+    $bool_dv_empleado = ($arr[2]);
+    $bool_correo_empleado = ($arr[3]);
+    $bool_username_empleado = ($arr[4]);
+    $bool_contrasena_empleado = ($arr[5]);
+    $bool_telefono_empleado = ($arr[6]);
+    $bool_jornada_empleado = ($arr[7]); 
+    $bool_isapre_empleado =($arr[8]); 
+    $bool_contrato_empleado = ($arr[9]); 
+    $bool_codigo_reserva_empleado = ($arr[10]);
+    $bool_codigo_agenda_empleado = ($arr[11]);
+    $bool_fecha_empleado = ($arr[12]); # ADMITE NULO
+    $bool_monto_empleado = ($arr[13]);
+    $bool_cantidad_personas_empleado = ($arr[14]);
+    $bool_estado_disponibilidad_empleado = ($arr[15]); # NUEVO
+    $bool_numero_viaje_empleado = ($arr[16]); # NUEVO
+    $bool_lugar_origen_empleado = ($arr[17]); # NUEVO
+    $bool_lugar_llegada_empleado = ($arr[18]); # NUEVO
+    $bool_fecha_salida_empleado =($arr[19]); # MISMO FORMATO QUE FECHA???
+    $bool_fecha_llegada_empleado = ($arr[20]); # NO ADMITE NULO 
+    $bool_capacidad_empleado = ($arr[21]); # NUEVO
+    $bool_tiempo_estimado_empleado = ($arr[22]); # NUEVO
+    $bool_precio_asiento = ($arr[23]); # NUEVO :SE PUEDE HACER COMO OTROS FLOAT???
+    $bool_empresa_empleado = ($arr[24]); # NUEVO
+    $bool_tipo_bus_empleado = ($arr[25]); # NUEVO
+    $bool_comodidades_empleado = ($arr[26]); # NUEVO LISTA
+    $bool_escalas_empleado = ($arr[27]); # NUEVO LISTA
+    $bool_clase_empleado = ($arr[28]); # NUEVO
+    $bool_paradas_empleado = ($arr[29]); # NUEVO LISTA
+   3 10 16 17 18 21 22 23 24 27 28 19 20
+     $bool_nombre = ($arr[0]);
+    # checkeo que ni rut ni dv sean nulos, en caso que esto ocurra checkeo si es rut
+    $bool_rut= ($arr[1]);
+    $bool_dv = ($arr[2]); 
+    $bool_correo = ($arr[3]);
+    $bool_username = ($arr[4]);
+    $bool_contrasena = ($arr[5]);
+    $bool_telefono = ($arr[6]);
+    $bool_puntos = ($arr[7]);
+    $bool_codigo_agenda = ($arr[8]);
+    $bool_etiqueta = ($arr[9]);
+    $bool_codigo_reserva = ($arr[10]);
+    $bool_fecha = ($arr[11]);
+    $bool_monto = ($arr[12]);
+    $bool_cantidad_personas = ($arr[13]);

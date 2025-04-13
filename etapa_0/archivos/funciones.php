@@ -4,26 +4,17 @@
  * Documentacion:
  * https://www.php.net/manual/es/reserved.variables.globals.php
  */
+$key_personasOK=[]; # Key: correo
+$key_usuariosOK=[]; # Key: correo
+$key_agendaOK=[]; # Key: agenda 
+$key_empleadosOK=[]; #
+$key_reservasOK=[]; # codigo_agenda codigo_reserva
+$key_transportesOK=[];
+$key_busesOK=[];
+$key_trenesOK=[];
+$key_avionesOK=[];
 $arreglo_codigos_agenda=[];
-$arreglo_codigos_reserva=[];
-$archivo_mal1= "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_limpios/datos_descartados_usuarios.csv";
-$archivo_mal_usuarios = fopen($archivo_mal1, "w");
-$arr_inicial = ["nombre", "run", "Dv", "Correo", "Nombre_usuario", "Contrasena", 
-"Telefono_contacto", "Puntos", "Codigo_agenda", "Etiqueta", "Codigo_reserva", 
-"Fecha", "Monto", "Cantidad_personas"];                                
-fputcsv($archivo_mal_usuarios, $arr_inicial, ",", '"', "\\");
-
-$archivo_mal2= "/Users/felipeblasquezcontreras/Desktop/2025-1/Bases de Datos/bdd_personal/etapa_0/CSV_limpios/datos_descartados_empleados.csv";
-$archivo_mal_empleados = fopen($archivo_mal2, "w");
-$arr_inicial2 = ["nombre", "run", "Dv", "Correo", "Nombre_usuario", "Contrasena", 
-"Telefono_contacto", "Jornada", "Isapre", "Contrato", "Codigo_reserva", 
-"Codigo_agenda", "Fecha", "Monto", "Cantidad_personas", "Estado_disponibilidad", 
-"Numero_viaje", "Lugar_origen", "Lugar_llegada", "Fecha_salida", "Fecha_llegada",
-"Capacidad", "Tiempo_estimado", "Precio_asiento", "Empresa", "Tipo_de_bus",
-"Comodidades", "Escalas", "Clase", "Paradas"];                                
-fputcsv($archivo_mal_empleados, $arr_inicial2, ",", '"', "\\");
-     
-
+$arreglo_codigos_reservas=[];
 // USUARIOS 
 function parse_nombre($str){
     /**Nombre 
@@ -41,7 +32,7 @@ function parse_rut($str){
      * Consideraciones:
      * NO ADMITE NULO
      */
-    if ($str != NULL){
+    if (empty($str)){
         $str = preg_replace('/\D/', '', $str);
         return $str;
     }else{
@@ -55,7 +46,7 @@ function parse_dv($str){
      * Consideraciones:
      * NO ADMITE NULO
      */
-    if ($str != NULL){
+    if (empty($str)){
         $str = preg_replace('/\D/', '', $str);
         return $str;
     }else{
@@ -120,7 +111,7 @@ function parse_telefono($str){
      * Documentacion:
      * https://www.php.net/manual/es/function.preg-replace.php
      */
-    if ($str != NULL){
+    if (empty($str)){
         /*cualquier otro caso para mantener la mayor cantidad de datos, se ignoran los primeros numeros 
         y se toman en cuenta solo los 9 ultimos agregando siempre el codigo de pais
         */
@@ -149,11 +140,13 @@ function parse_puntos($str){
      * Documentacion:
      * https://www.php.net/manual/es/function.strlen.php
      */
-    $numero_saneado = preg_replace('/[^0-9]/', '', $str);
-    if (strlen($numero_saneado) == 0 || $numero_saneado == NULL){    
-        $numero_saneado = 0;
+    if (empty($str)){
+        return 0;
+    }else if ($str < 0){
+        return $str*-1;
+    }else{
+        return $str;
     }
-    return $numero_saneado;
 }
 
 function parse_codigo_agenda($str){
@@ -168,14 +161,18 @@ function parse_codigo_agenda($str){
      * https://www.php.net/manual/es/function.in-array.php
      */
     global $arreglo_codigos_agenda;
-    if ($str == NULL){
-        $numero_saneado = 0;
+    if (empty($str)){
+        $str=0;
+        array_push($arreglo_codigos_agenda, $str);
+        return $str;
+    } else if ($str <0){
+        $str=$str*-1;
     }
-    $numero_saneado = preg_replace('/[^0-9]/', '', $str);
-    if (in_array($numero_saneado, $arreglo_codigos_agenda) != FALSE){
-        return FALSE;
+    if(in_array($str, $arreglo_codigos_agenda)!=TRUE){
+        array_push($arreglo_codigos_agenda, $str);
+        return $str;
     } else{
-        return $numero_saneado;
+        return FALSE;
     }
     
 }
@@ -199,15 +196,19 @@ function parse_codigo_reserva($str){
      * https://www.php.net/manual/es/reserved.variables.globals.php
      * https://www.php.net/manual/es/function.in-array.php
      */
-    global $arreglo_codigos_reserva;
-    if ($str == NULL){
-        $numero_saneado = 0;
+    global $arreglo_codigos_reservas;
+    if (empty($str)){
+        $str=0;
+        array_push($arreglo_codigos_reservas, $str);
+        return $str;
+    } else if ($str <0){
+        $str=$str*-1;
     }
-    $numero_saneado = preg_replace('/[^0-9]/', '', $str);
-    if (in_array($numero_saneado, $arreglo_codigos_reserva) != FALSE){
-        return FALSE;
+    if(in_array($str, $arreglo_codigos_reservas)!=TRUE){
+        array_push($arreglo_codigos_reservas, $str);
+        return $str;
     } else{
-        return $numero_saneado;
+        return FALSE;
     }
     
 }
@@ -221,7 +222,7 @@ function parse_fecha($str){
      * Documentacion:
      * https://www.php.net/manual/es/function.preg-replace.php
      */
-    if ($str == NULL){
+    if (empty($str)){
         return $str;
     }
     $numero_saneado = preg_replace('/[^0-9]/', '', $str);
@@ -243,7 +244,7 @@ function parse_monto($str){
      * https://www.php.net/manual/es/reserved.variables.globals.php
      * https://www.php.net/manual/es/function.in-array.php
      */
-    if ($str == NULL){
+    if (empty($str)){
         $numero_saneado = 0.0;
     }
     $numero_saneado = preg_replace('/[^0-9]/', '', $str);
@@ -262,7 +263,7 @@ function parse_cantidad_personas($str){
      * https://www.php.net/manual/es/function.in-array.php
      */
     if ($str == NULL){
-        $numero_saneado = 1;
+        return "";
     }
     $numero_saneado = preg_replace('/[^0-9]/', '', $str);
     return $numero_saneado; 
@@ -298,118 +299,7 @@ function confirm_rut($numero, $dv){
     }
 }
 
-function parse_usuarios($arr){
-    /**
-     * Parse Usuarios
-     * Consideraciones:
-     * Documentacion:
-     * https://www.php.net/manual/es/function.array-push.php
-     */
-    echo "parse_usuarios...\n";
-    $arr_correcto = [];
-    $arr_malo = [];
-    $correctitud = TRUE;
-    global $archivo_mal_usuarios;
 
-    $bool_nombre = parse_nombre($arr[0]);
-    # checkeo que ni rut ni dv sean nulos, en caso que esto ocurra checkeo si es rut
-    $bool_rut= parse_rut($arr[1]);
-    $bool_dv = parse_dv($arr[2]); 
-    $bool_correo = parse_correo($arr[3]);
-    $bool_username = parse_username($arr[4]);
-    $bool_contrasena = parse_contrasena($arr[5]);
-    $bool_telefono = parse_telefono($arr[6]);
-    $bool_puntos = parse_puntos($arr[7]);
-    $bool_codigo_agenda = parse_codigo_agenda($arr[8]);
-    $bool_etiqueta = parse_etiqueta($arr[9]);
-    $bool_codigo_reserva = parse_codigo_reserva($arr[10]);
-    $bool_fecha = parse_fecha($arr[11]);
-    $bool_monto = parse_monto($arr[12]);
-    $bool_cantidad_personas = parse_cantidad_personas($arr[13]);
-
-    if ($bool_nombre !== FALSE){
-        //echo "NOMBRE: $bool_nombre\n";
-        array_push($arr_correcto, $bool_nombre);
-    }else{
-        echo "NOMBRE: mal\n"; $correctitud = FALSE; array_push($arr_correcto,"");} 
-
-    if ($bool_rut != FALSE AND $bool_dv != FALSE){   
-        $is_rut = confirm_rut($bool_rut, $bool_dv);
-        if ($is_rut != FALSE){
-            //echo "RUT: $bool_rut-$bool_dv \n";
-            array_push($arr_correcto, $bool_rut);
-            array_push($arr_correcto, $bool_dv);
-        }}else{echo "RUT: mal\n";$correctitud = FALSE; array_push($arr_correcto,""); 
-            array_push($arr_correcto,"");} #lo meto en el archivo de error y salgo de la funcion
-
-
-    if ($bool_correo !== FALSE){
-        //echo "CORREO: $bool_correo\n";
-        array_push($arr_correcto, $bool_correo);
-    } else{echo "CORREO: mal\n"; $correctitud = FALSE; array_push($arr_correcto,"");} 
-
-    if ($bool_username !== FALSE){
-        //echo "USERNAME: $bool_username\n";
-        array_push($arr_correcto, $bool_username);
-    }else{echo "USERNAME: mal\n"; $correctitud = FALSE; array_push($arr_correcto,"");}
-
-    if ($bool_contrasena !== FALSE){
-        //echo "PASSWORD: $bool_contrasena\n";
-        array_push($arr_correcto, $bool_contrasena);
-    }else{echo "PASSWORD: mal\n";$correctitud = FALSE;array_push($arr_correcto,"");}
-
-    
-    if ($bool_telefono !== FALSE){
-        //echo "TELEFONO: $bool_telefono\n";
-        array_push($arr_correcto, $bool_telefono);
-    }else{echo "TELEFONO: mal\n";$correctitud = FALSE;array_push($arr_correcto,"");}
-
-    if ($bool_puntos !== FALSE){
-        //echo "PUNTOS: $bool_puntos\n";
-        array_push($arr_correcto, $bool_puntos);
-    }else{echo "PUNTOS: mal\n";$correctitud = FALSE;array_push($arr_correcto,"");}
-
-    if ($bool_codigo_agenda !== FALSE){
-        //echo "CODIGO AGENDA: $bool_codigo_agenda\n";
-        array_push($arr_correcto, $bool_codigo_agenda);
-    }else{echo "CODIGO AGENDA: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
-
-    if ($bool_etiqueta !== FALSE){ #preguntar si hay que hacer algun filtro con etiqueta u otros
-        //echo "ETIQUETA: $bool_etiqueta\n";
-        array_push($arr_correcto, $bool_etiqueta);
-    }else{echo "etiqueta: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
-
-    if ($bool_codigo_reserva !== FALSE){
-        //echo "CODIGO RESERVA: $bool_codigo_reserva\n";
-        array_push($arr_correcto, $bool_codigo_reserva);
-    }else{echo "CODIGO RESERVA: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
-
-    if ($bool_fecha !== FALSE){
-        //echo "FECHA: $bool_fecha\n";
-        array_push($arr_correcto, $bool_fecha);
-    }else{echo "FECHA: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
-
-    if ($bool_monto !== FALSE){
-        //echo "MONTO: $bool_monto\n";
-        array_push($arr_correcto, $bool_monto);
-    }else{echo "MONTO: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
-
-    if ($bool_cantidad_personas !== FALSE){
-        //echo "CANTIDAD PERSONAS: $bool_cantidad_personas\n";
-        array_push($arr_correcto, $bool_cantidad_personas);
-    }else{echo "CANTIDAD PERSONAS: mal\n";$correctitud = FALSE; array_push($arr_correcto,"");}
-
-    //var_dump($arr_correcto);
-    if ($correctitud === FALSE){
-
-        fputcsv($archivo_mal_usuarios, $arr_correcto, ",", '"', "\\");
-            
-        return "";
-    }else{
-        return $arr_correcto;
-    }
-    echo "\n"; 
-    }
          
 // EMPLEADOS *Algunas funciones se repiten con Usuarios, ver eso despues
 function parse_nombre_empleado($arr){
@@ -464,7 +354,6 @@ function parse_jornada_empleado($str){
     if ($str == "" || $str == "Diurno" || $str == "Nocturno"){
         return $str;
     } else{
-        echo "jornada: $str\n";
         return FALSE;
     }
 }
@@ -479,10 +368,9 @@ function parse_contrato_empleado($str){
      * Contrato: String, tipo de contrato (part time o full time), admite nulo.
      */
     $str = preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/u", "", $str);
-     if ($str == NULL || $str == "Part time" || $str == "Full time"){
+     if (empty($str) || $str == "Part time" || $str == "Full time"){
         return $str;
     } else{
-        echo "Contrato: $str\n";
         return FALSE;
     }
 
@@ -492,7 +380,7 @@ function parse_codigo_reserva_empleado($str){
     /** 
      * Codigo reserva: Integer, co ́digo u ́nico para identificar una reserva, no nulo. 
      */   
-    if ($str == NULL){
+    if (empty($str)){
         return FALSE;
     }else{
         return $str;
@@ -529,7 +417,7 @@ function parse_estado_disponibilidad($str){
      * admite nulo.
      * Disponible o No disponible
      */
-    if ($str == NULL || $str == "Disponible" || $str == "No Disponible"){
+    if (empty($str)|| $str == "Disponible" || $str == "No Disponible"){
         return $str;
     }else{
         return FALSE;
@@ -539,23 +427,27 @@ function parse_numero_viaje_empleado($str){
     /**
      * Numero viaje: Integer, identificador del viaje, no nulo.
      */
-    if ($str == NULL){
+    if (empty($str)){
         return FALSE;
+    } else if ($str <0){
+        $str=$str*-1;
+        return $str;
     } else{
         return $str;
     }
-    }
+}
 function parse_lugar_origen_llegada($str){
     /**
      * Lugar origen: String, solo admite letras (sin s ́ımbolos), admite nulo.
      * Documentacion:
      * https://www.php.net/manual/es/function.preg-replace.php
+     * https://www.php.net/manual/es/function.empty.php
      */
-    if ($str == NULL){
+    if (empty($str)) {
+        return NULL;
+    } else {
+        $str = preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/u", "", $str);
         return $str;
-    }else{
-        $str =  preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/u", "", $str);
-        return $str; 
     }
 }
 function parse_lugar_llegada_empleado($arr){
@@ -633,7 +525,7 @@ function parse_precio_asiento($str){
      * https://www.php.net/manual/es/function.preg-replace.php
      */
     if ($str == NULL){
-        return FALSE;
+        return 0;
     }else{
         $numero_saneado = preg_replace('/[^0-9]/', '', $str);
         return $numero_saneado;
@@ -657,12 +549,12 @@ function parse_tipo_bus($str){
      * Se limpia el string de sibolos que no sean -
      * Documentacion:
      * https://www.php.net/manual/es/function.preg-replace.php
+     *
      */
-    if ($str == NULL || $str == ""){
-        return NULL;
-    }
-    $str_saneado = preg_replace('/[^a-zA-ZáéíóúÁÉÍÓÚñÑ-]/u', '', $str);
-    if ($str_saneado == "normal" || $str_saneado == "semi-cama" || $str_saneado == "cama"){
+    $str_saneado=$str;
+   
+    if ($str_saneado == "Normal" || $str_saneado == "Semi-cama" || $str_saneado == "Cama" 
+    || $str_saneado==""){
         return $str_saneado;
     }
 }
@@ -696,12 +588,10 @@ function parse_clase($str){
      * Documentacion:
      * https://www.php.net/manual/es/function.preg-replace.php
      */
-    if ($str == NULL){
-        return NULL;
-    }
-    $str_saneado = preg_replace('/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/u', '', $str);
-    if ($str_saneado == "primera clase" || $str_saneado == "clase ejecutiva"
-     || $str_saneado == "clase económica"){
+
+    $str_saneado =$str; 
+    if ($str_saneado == "Primera clase" || $str_saneado == "Clase ejecutiva"
+     || $str_saneado == "Clase económica"|| $str_saneado==""){
         return $str_saneado;
     }
 }
@@ -715,210 +605,338 @@ function parse_paradas($str){
         return $str;
     }
 }
-function parse_empleados($arr){
-    /**
-     * Parse Empleados
-     * Consideraciones:
-     * Algunos datos usan funciones que se usaron para limpiar usuarios_rescatados.csv
-     * Documentacion:
-     */
-    global $archivo_mal_empleados;
-
+function add_personas_OK($nombre, $rut, $dv, $correo, $contrasena, $username, $telefono){
+    global $key_personasOK;
+    $personas_OK=[];
+    $nombre=parse_nombre($nombre);
+    $rut=parse_rut($rut);
+    $dv=parse_dv($dv);
+    $correo=parse_correo($correo);
+    $contrasena=parse_contrasena($contrasena);
+    $username=parse_username($username);
+    $telefono=parse_telefono($telefono);
     $correctitud = TRUE;
-    $arr_correcto =[];
-    $bool_nombre_empleado=parse_nombre($arr[0]);
-    $bool_rut_empleado = parse_rut($arr[1]);
-    $bool_dv_empleado = parse_dv($arr[2]);
-    $bool_correo_empleado = parse_correo($arr[3]);
-    $bool_username_empleado = parse_username($arr[4]);
-    $bool_contrasena_empleado = parse_contrasena($arr[5]);
-    $bool_telefono_empleado = parse_telefono($arr[6]);
-    $bool_jornada_empleado = parse_jornada_empleado($arr[7]); 
-    $bool_isapre_empleado = parse_isapre_empleado($arr[8]); 
-    $bool_contrato_empleado = parse_contrato_empleado($arr[9]); 
-    $bool_codigo_reserva_empleado = parse_codigo_reserva($arr[10]);
-    $bool_codigo_agenda_empleado = parse_codigo_agenda_empleado($arr[11]);
-    $bool_fecha_empleado = parse_fecha($arr[12]); # ADMITE NULO
-    $bool_monto_empleado = parse_monto($arr[13]);
-    $bool_cantidad_personas_empleado = parse_cantidad_personas($arr[14]);
-    $bool_estado_disponibilidad_empleado = parse_estado_disponibilidad($arr[15]); # NUEVO
-    $bool_numero_viaje_empleado = parse_numero_viaje_empleado($arr[16]); # NUEVO
-    $bool_lugar_origen_empleado = parse_lugar_origen_llegada($arr[17]); # NUEVO
-    $bool_lugar_llegada_empleado = parse_lugar_origen_llegada($arr[18]); # NUEVO
-    $bool_fecha_salida_empleado = parse_fecha($arr[19]); # MISMO FORMATO QUE FECHA???
-    $bool_fecha_llegada_empleado = parse_fecha_llegada_empleado($arr[20]); # NO ADMITE NULO 
-    $bool_capacidad_empleado = parse_capacidad_empleado($arr[21]); # NUEVO
-    $bool_tiempo_estimado_empleado = parse_tiempo_estimado($arr[22]); # NUEVO
-    $bool_precio_asiento = parse_precio_asiento($arr[23]); # NUEVO SE PUEDE HACER COMO OTROS FLOAT???
-    $bool_empresa_empleado = parse_empresa($arr[24]); # NUEVO
-    $bool_tipo_bus_empleado = parse_tipo_bus($arr[25]); # NUEVO
-    $bool_comodidades_empleado = parse_comodidades($arr[26]); # NUEVO LISTA
-    $bool_escalas_empleado = parse_escalas($arr[27]); # NUEVO LISTA
-    $bool_clase_empleado = parse_clase($arr[28]); # NUEVO
-    $bool_paradas_empleado = parse_paradas($arr[29]); # NUEVO LISTA
-    /**
-     * en todos los casos que retorne FALSE es por que es no valido por lo tanto la fila entera se 
-     * agrega al archivo de error
-     */
-    if ($bool_nombre_empleado !== FALSE){
-        //echo "NOMBRE empleado: $bool_nombre_empleado\n";
-        array_push($arr_correcto, $bool_nombre_empleado);
-    }else{echo "NOMBRE empleado mal\n";$correctitud = FALSE; array_push($arr_correcto, "");}
-
-    if ($bool_rut_empleado != FALSE AND $bool_dv_empleado != FALSE){   
-        $is_rut = confirm_rut($bool_rut_empleado, $bool_dv_empleado);
-        if ($is_rut != FALSE){
-            //echo "RUT: $bool_rut_empleado-$bool_dv_empleado \n";
-            array_push($arr_correcto, $bool_rut_empleado);
-            array_push($arr_correcto, $bool_dv_empleado);
-        }}else{echo "RUT: mal\n";$correctitud = FALSE;array_push($arr_correcto, "");array_push($arr_correcto, "");}# lo meto en el archivo de error y salgo de la funcion
-    
-    if ($bool_correo_empleado !== FALSE){
-        //echo "CORREO empleado: $bool_correo_empleado\n";
-        array_push($arr_correcto, $bool_correo_empleado);
-    } else{echo "CORREO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_username_empleado !== FALSE){
-        //echo "USERNAME empleado: $bool_username_empleado\n";
-        array_push($arr_correcto, $bool_username_empleado);
-    }else{echo "USERNAME empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_contrasena_empleado !== FALSE){
-        //echo "contrasena empleado: $bool_contrasena_empleado\n";
-        array_push($arr_correcto, $bool_contrasena_empleado);
-    }else{echo "contrasena mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-    
-    if ($bool_telefono_empleado !== FALSE){
-        //echo "TELEFONO empleado: $bool_telefono_empleado\n";
-        array_push($arr_correcto, $bool_telefono_empleado);
-    }else{echo "TELEFONO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_jornada_empleado !== FALSE){
-       //echo "JORNADA empleado: $bool_jornada_empleado\n";
-       array_push($arr_correcto, $bool_jornada_empleado);
-    }else{echo "JORNADA empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_isapre_empleado !== FALSE){
-        //echo "ISAPRE empleado: $bool_isapre_empleado\n";
-        array_push($arr_correcto, $bool_isapre_empleado);
-    }else{echo "ISAPRE empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_contrato_empleado !== FALSE){
-        //echo "CONTRATO empleado: $bool_contrato_empleado\n";
-        array_push($arr_correcto, $bool_contrato_empleado);
-    }else{echo "CONTRATO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_codigo_reserva_empleado !== FALSE){
-        //echo "CODIGO RESERVA: $bool_codigo_reserva_empleado\n";
-        array_push($arr_correcto, $bool_codigo_reserva_empleado);
-    }else{echo "CODIGO RESERVA mal\n";$correctitud = FALSE;array_push($arr_correcto, "");} 
-
-    if ($bool_codigo_agenda_empleado !== FALSE){
-        //echo "CODIGO AGENDA: $bool_codigo_agenda_empleado\n";
-        array_push($arr_correcto, $bool_codigo_agenda_empleado);
-    }else{echo "CODIGO AGENDA mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_fecha_empleado !== FALSE){
-        //echo "FECHA empleado: $bool_fecha_empleado\n";
-        array_push($arr_correcto, $bool_fecha_empleado);
-    }else{echo "FECHA empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_monto_empleado !== FALSE){
-        //echo "MONTO empleado: $bool_monto_empleado\n";
-        array_push($arr_correcto, $bool_monto_empleado);
-    }else{echo "MONTO empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_cantidad_personas_empleado !== FALSE){
-        //echo "CANTIDAD PERSONAS: $bool_cantidad_personas_empleado\n";
-        array_push($arr_correcto, $bool_cantidad_personas_empleado);
-    }else{echo "CANTIDAD PERSONAS mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_estado_disponibilidad_empleado !== FALSE){
-        //echo "ESTADO DISPONIBILIDAD empleado: $bool_estado_disponibilidad_empleado\n";
-        array_push($arr_correcto, $bool_estado_disponibilidad_empleado);
-    }else{echo "ESTADP DISPONIBILIDAD empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_numero_viaje_empleado !== FALSE){
-        //echo "NUMERO VIAJE empelado: $bool_numero_viaje_empleado\n";
-        array_push($arr_correcto, $bool_numero_viaje_empleado);
-    }else{echo "NUMERO VIAJE empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_lugar_origen_empleado !== FALSE){
-       //echo "lugar origen empleado: $bool_lugar_origen_empleado\n";
-       array_push($arr_correcto, $bool_lugar_origen_empleado);
-    }else{echo "lugar origen mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_lugar_llegada_empleado !== FALSE){
-        //echo "lugar llegada empleado: $bool_lugar_llegada_empleado\n";
-        array_push($arr_correcto, $bool_lugar_llegada_empleado);
-    }else{echo "lugar llegada empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_fecha_salida_empleado !== FALSE){
-        //echo "fecha salida empleado: $bool_fecha_salida_empleado\n";
-        array_push($arr_correcto, $bool_fecha_salida_empleado);
-    }else{echo "fecha salida empleado: mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_fecha_llegada_empleado !== FALSE){
-        //echo "fecha llegada empleado: $bool_fecha_llegada_empleado\n";
-        array_push($arr_correcto, $bool_fecha_llegada_empleado);
-    }else{echo "fecha llegada empleado: mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_capacidad_empleado !== FALSE){
-        //echo "capacidad empleado: $bool_capacidad_empleado\n";
-        array_push($arr_correcto, $bool_capacidad_empleado);
-    }else{echo "capacidad empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_tiempo_estimado_empleado !== FALSE){
-        //echo "tiempo estimado empleado: $bool_tiempo_estimado_empleado\n";
-        array_push($arr_correcto, $bool_tiempo_estimado_empleado);
-    }else{echo "tiempo estimado empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_precio_asiento !== FALSE){
-        //echo "precio asiento: $bool_precio_asiento\n";
-        array_push($arr_correcto, $bool_precio_asiento);
-    }else{echo "precio asiento mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_empresa_empleado !== FALSE){
-        //echo "empresa empleado: $bool_empresa_empleado\n";
-        array_push($arr_correcto, $bool_empresa_empleado);
-    }else{echo "empresa empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_tipo_bus_empleado !== FALSE){
-        //echo "tipo bus empleado: $bool_tipo_bus_empleado\n";
-        array_push($arr_correcto, $bool_tipo_bus_empleado);
-    }else{echo "tipo bus mal $bool_tipo_bus_empleado\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_comodidades_empleado !== FALSE){
-        //echo "comodidades empleado: $bool_comodidades_empleado\n";
-        array_push($arr_correcto, $bool_comodidades_empleado);
-    }else{echo "comodidades empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_escalas_empleado !== FALSE){
-        //echo "escalas empleado: $bool_escalas_empleado\n";
-        array_push($arr_correcto, $bool_escalas_empleado);
-    }else{echo "escalas empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_clase_empleado !== FALSE){
-        //echo "clase empleado: $bool_clase_empleado\n";
-        array_push($arr_correcto, $bool_clase_empleado);
-    }else{echo "clase empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    if ($bool_paradas_empleado !== FALSE){
-        //echo "paradas empleado: $bool_paradas_empleado\n";
-        array_push($arr_correcto, $bool_paradas_empleado);
-    }else{echo "paradas empleado mal\n";$correctitud = FALSE;array_push($arr_correcto, "");}
-
-    //var_dump($arr_correcto);
-    if ($correctitud == FALSE){
-        fputcsv($archivo_mal_empleados, $arr_correcto, ",", '"', "\\");
-        return "";
-    }else{
-        return $arr_correcto;
+    if ($rut != FALSE && $dv != FALSE){
+        if(confirm_rut($rut, $dv) != FALSE && $nombre != FALSE && $correo != FALSE 
+        && $contrasena != FALSE && $username != FALSE && $telefono != FALSE 
+        && in_array($correo , $key_personasOK) != TRUE){
+            array_push($key_personasOK, $correo);
+            array_push($personas_OK, $nombre);
+            array_push($personas_OK, $rut);
+            array_push($personas_OK, $dv);
+            array_push($personas_OK, $correo);
+            array_push($personas_OK, $contrasena);
+            array_push($personas_OK, $username);
+            array_push($personas_OK, $telefono);
+            return $personas_OK;
+        } else{
+            return FALSE;
+        }
+    } 
+}
+function add_usuarios_OK($nombre, $rut, $dv, $correo, $contrasena, $username, $telefono, $puntos){
+    global $key_usuariosOK;
+    $personas_OK=[];
+    $nombre=parse_nombre($nombre);
+    $rut=parse_rut($rut);
+    $dv=parse_dv($dv);
+    $correo=parse_correo($correo);
+    $contrasena=parse_contrasena($contrasena);
+    $username=parse_username($username);
+    $telefono=parse_telefono($telefono); 
+    $puntos=parse_puntos($puntos);
+    if ($rut != FALSE && $dv != FALSE){
+        if(confirm_rut($rut, $dv) != FALSE && $nombre != FALSE && $correo != FALSE 
+        && $contrasena != FALSE && $username != FALSE && $telefono != FALSE && $puntos != FALSE
+        && in_array($correo , $key_usuariosOK) != TRUE){
+            array_push($key_usuariosOK, $correo);
+            array_push($personas_OK, $nombre);
+            array_push($personas_OK, $rut);
+            array_push($personas_OK, $dv);
+            array_push($personas_OK, $correo);
+            array_push($personas_OK, $contrasena);
+            array_push($personas_OK, $username);
+            array_push($personas_OK, $telefono);
+            array_push($personas_OK, $puntos);
+            return $personas_OK;
+        } else{
+            return FALSE;
+        } 
     }
-    echo "\n";
-   
+}
+
+
+function add_empleados_OK($nombre, $rut, $dv, $correo, $contrasena, $username, $telefono, $jornada,
+$isapre, $contrato){
+    global $key_empleadosOK;
+    $empleados_OK=[];
+    $nombre=parse_nombre($nombre);
+    $rut=parse_rut($rut);
+    $dv=parse_dv($dv);
+    $correo=parse_correo($correo);
+    $contrasena=parse_contrasena($contrasena);
+    $username=parse_username($username);
+    $telefono=parse_telefono($telefono); 
+    $jornada=parse_jornada_empleado($jornada);
+    $isapre=parse_isapre_empleado($isapre);
+    $contrato=parse_contrato_empleado($contrato);
+    if ($rut != FALSE && $dv != FALSE){
+        if(confirm_rut($rut, $dv) != FALSE && $nombre != FALSE && $correo != FALSE 
+        && $contrasena != FALSE && $username != FALSE && $telefono != FALSE 
+        && $jornada!=FALSE && $isapre!=FALSE && $contrato!=FALSE 
+        && in_array($correo , $key_empleadosOK) != TRUE){
+            array_push($key_empleadosOK, $correo);
+            array_push($empleados_OK, $nombre);
+            array_push($empleados_OK, $rut);
+            array_push($empleados_OK, $dv);
+            array_push($empleados_OK, $correo);
+            array_push($empleados_OK, $contrasena);
+            array_push($empleados_OK, $username);
+            array_push($empleados_OK, $telefono);
+            array_push($empleados_OK, $jornada);
+            array_push($empleados_OK, $isapre);
+            array_push($empleados_OK, $contrato);
+            return $empleados_OK;
+        } else{
+            return FALSE;
+        } 
+    } 
+}
+function add_agenda_OK($correo, $codigo_agenda, $etiqueta){
+    global $key_agendaOK;
+    $agenda_OK=[];
+    $correo=parse_correo($correo);
+    $codigo_agenda=parse_codigo_agenda($codigo_agenda);
+    $etiqueta=parse_etiqueta($etiqueta);
+    if ($correo!=FALSE && $codigo_agenda!=FALSE && $etiqueta!=FALSE && 
+    in_array($codigo_agenda, $key_agendaOK)!=TRUE){
+        array_push($key_agendaOK, $codigo_agenda);
+        array_push($agenda_OK, $correo);
+        array_push($agenda_OK, $codigo_agenda);
+        array_push($agenda_OK, $etiqueta);
+        return $agenda_OK;
+    }else{
+        return FALSE;
+    }
+}
+
+function add_reservas_OK($codigo_agenda, $codigo_reserva, $fecha, $monto, $cantidad_personas, $estado){
+    global $key_reservasOK;
+    $key=[];
+    $arr_reservasOK=[];
+    $codigo_agenda=parse_codigo_agenda_empleado($codigo_agenda);
+    $codigo_reserva=parse_codigo_reserva_empleado($codigo_reserva);
+    $fecha=parse_fecha($fecha);
+    $monto=parse_monto($monto);
+    $cantidad_personas=parse_cantidad_personas($cantidad_personas);
+    $estado=parse_estado_disponibilidad($estado);
+    array_push($key, $codigo_agenda);
+    array_push($key, $codigo_reserva);
+    array_push($key, $estado);
+    if($codigo_agenda!==FALSE && $codigo_reserva!==FALSE && $fecha!==FALSE && $monto!==FALSE && 
+    $cantidad_personas!==FALSE && $estado!==FALSE && in_array($key, $key_reservasOK)!=TRUE ){
+        array_push($key_reservasOK, $key);
+        array_push($arr_reservasOK, $codigo_agenda);
+        array_push($arr_reservasOK, $codigo_reserva);
+        array_push($arr_reservasOK, $fecha);
+        array_push($arr_reservasOK, $monto);
+        array_push($arr_reservasOK, $cantidad_personas);
+        array_push($arr_reservasOK, $estado);
+        return  $arr_reservasOK;
+    } else{
+        return FALSE;
+    }
 
 
 }
+function add_transportes_OK($correo, $codigo_reserva, $numero_viaje, $lugar_origen, $lugar_destino,
+$capacidad, $tiempo_estimado, $precio_asiento, $empresa, $fecha_salida, $fecha_llegada){
+    global $key_transportesOK;
+    $key=[];
+    $arr_transportesOK=[];
+
+    $correo=parse_correo($correo);
+    $codigo_reserva=parse_codigo_reserva_empleado($codigo_reserva);
+    $numero_viaje=parse_numero_viaje_empleado($numero_viaje);
+    $lugar_origen=parse_lugar_origen_llegada($lugar_origen);
+    $lugar_destino=parse_lugar_origen_llegada($lugar_destino);
+    $capacidad=parse_capacidad_empleado($capacidad);
+    $tiempo_estimado=parse_tiempo_estimado($tiempo_estimado);
+    $precio_asiento=parse_precio_asiento($precio_asiento);
+    $empresa=parse_empresa($empresa);
+    $fecha_salida=parse_fecha($fecha_salida);
+    $fecha_llegada=parse_fecha($fecha_llegada);
+
+    array_push($key, $correo);
+    array_push($key, $codigo_reserva);
+
+    if($correo!==FALSE && $codigo_reserva!==FALSE && $numero_viaje!==FALSE && $lugar_origen!==FALSE
+    && $lugar_destino!==FALSE && $capacidad!==FALSE && $tiempo_estimado!==FALSE && 
+    $precio_asiento!==FALSE && $empresa!==FALSE && $fecha_salida!==FALSE && $fecha_llegada!==FALSE
+    && in_array($key, $key_transportesOK)!=TRUE){
+        array_push($key_transportesOK, $key);
+        array_push($arr_transportesOK, $correo);
+        array_push($arr_transportesOK, $codigo_reserva);
+        array_push($arr_transportesOK, $numero_viaje);
+        array_push($arr_transportesOK, $lugar_origen);
+        array_push($arr_transportesOK, $lugar_destino);
+        array_push($arr_transportesOK, $capacidad);
+        array_push($arr_transportesOK, $tiempo_estimado);
+        array_push($arr_transportesOK, $precio_asiento);
+        array_push($arr_transportesOK, $empresa);
+        array_push($arr_transportesOK, $tiempo_estimado);
+        array_push($arr_transportesOK, $fecha_salida);
+        array_push($arr_transportesOK, $fecha_llegada);
+        return $arr_transportesOK;
+    }else{
+        return FALSE;
+    }
+
+}
+
+function add_buses_OK($correo, $codigo_reserva, $numero_viaje, $lugar_origen, $lugar_destino,
+$capacidad, $tiempo_estimado, $precio_asiento, $empresa, $tipo, $comodidades, $fecha_salida,
+$fecha_llegada){
+    global $key_busesOK;
+    $key=[];
+    $arr_busesOK=[];
+
+    $correo=parse_correo($correo);
+    $codigo_reserva=parse_codigo_reserva_empleado($codigo_reserva);
+    $numero_viaje=parse_numero_viaje_empleado($numero_viaje);
+    $lugar_origen=parse_lugar_origen_llegada($lugar_origen);
+    $lugar_destino=parse_lugar_origen_llegada($lugar_destino);
+    $capacidad=parse_capacidad_empleado($capacidad);
+    $tiempo_estimado=parse_tiempo_estimado($tiempo_estimado);
+    $precio_asiento=parse_precio_asiento($precio_asiento);
+    $empresa=parse_empresa($empresa);
+    $tipo=parse_tipo_bus($tipo);
+    $comodidades=parse_comodidades($comodidades);
+    $fecha_salida=parse_fecha($fecha_salida);
+    $fecha_llegada=parse_fecha($fecha_llegada);
+
+    array_push($key, $correo);
+    array_push($key, $codigo_reserva);
+
+    if($correo!==FALSE && $codigo_reserva!==FALSE && $numero_viaje!==FALSE && $lugar_origen!==FALSE
+    && $lugar_destino!==FALSE && $capacidad!==FALSE && $tiempo_estimado!==FALSE && $empresa!==FALSE
+    && $tipo!==FALSE && $fecha_salida!==FALSE && $fecha_llegada!==FALSE && 
+    in_array($key, $key_busesOK)!=TRUE){
+        array_push($key_busesOK, $key);
+        array_push($arr_busesOK, $correo); 
+        array_push($arr_busesOK, $codigo_reserva);
+        array_push($arr_busesOK, $numero_viaje);
+        array_push($arr_busesOK, $lugar_origen);
+        array_push($arr_busesOK, $lugar_destino);
+        array_push($arr_busesOK, $capacidad);
+        array_push($arr_busesOK, $tiempo_estimado);
+        array_push($arr_busesOK, $precio_asiento);
+        array_push($arr_busesOK, $empresa);
+        array_push($arr_busesOK, $tipo);
+        array_push($arr_busesOK, $comodidades);
+        array_push($arr_busesOK, $fecha_salida);
+        array_push($arr_busesOK, $fecha_llegada);
+        return $arr_busesOK;
+    } else{
+        return FALSE;
+    }
+
+}
+function add_trenes_OK($correo, $codigo_reserva, $numero_viaje, $lugar_origen, $lugar_destino,
+$capacidad, $tiempo_estimado, $precio_asiento, $empresa, $comodidades, $paradas, $fecha_salida,
+$fecha_llegada){
+    global $key_trenesOK;
+    $key=[];
+    $arr_trenesOK=[];
+
+    $correo=parse_correo($correo);
+    $codigo_reserva=parse_codigo_reserva_empleado($codigo_reserva);
+    $numero_viaje=parse_numero_viaje_empleado($numero_viaje);
+    $lugar_origen=parse_lugar_origen_llegada($lugar_origen);
+    $lugar_destino=parse_lugar_origen_llegada($lugar_destino);
+    $capacidad=parse_capacidad_empleado($capacidad);
+    $tiempo_estimado=parse_tiempo_estimado($tiempo_estimado);
+    $precio_asiento=parse_precio_asiento($precio_asiento);
+    $empresa=parse_empresa($empresa);
+    $comodidades=parse_comodidades($comodidades);
+    $paradas=parse_paradas($paradas);
+    $fecha_salida=parse_fecha($fecha_salida);
+    $fecha_llegada=parse_fecha($fecha_llegada);
+
+    array_push($key, $correo);
+    array_push($key, $codigo_reserva);
+
+    if($correo!==FALSE && $codigo_reserva!==FALSE && $numero_viaje!==FALSE && $lugar_origen!==FALSE
+    && $lugar_destino!==FALSE && $capacidad!==FALSE && $tiempo_estimado!==FALSE && $precio_asiento!==FALSE 
+    && $empresa!==FALSE && $comodidades!==FALSE && $paradas!==FALSE && $fecha_salida!==FALSE 
+    && $fecha_llegada!==FALSE && in_array($key, $key_trenesOK)!=TRUE){
+        array_push($key_trenesOK, $key);
+        array_push($arr_trenesOK, $correo); 
+        array_push($arr_trenesOK, $codigo_reserva);
+        array_push($arr_trenesOK, $numero_viaje);
+        array_push($arr_trenesOK, $lugar_origen);
+        array_push($arr_trenesOK, $lugar_destino);
+        array_push($arr_trenesOK, $capacidad);
+        array_push($arr_trenesOK, $tiempo_estimado);
+        array_push($arr_trenesOK, $precio_asiento);
+        array_push($arr_trenesOK, $empresa);
+        array_push($arr_trenesOK, $comodidades);
+        array_push($arr_trenesOK, $paradas);
+        array_push($arr_trenesOK, $fecha_salida);
+        array_push($arr_trenesOK, $fecha_llegada);
+        return $arr_trenesOK;
+    } else{
+        return FALSE;
+    }
+}
+function add_aviones_OK($correo, $codigo_reserva, $numero_viaje, $lugar_origen, $lugar_destino,
+$capacidad, $tiempo_estimado, $precio_asiento, $empresa, $escalas, $clase, $fecha_salida,
+$fecha_llegada){
+    global $key_avionesOK;
+    $key=[];
+    $arr_avionesOK=[];
+
+    $correo=parse_correo($correo);
+    $codigo_reserva=parse_codigo_reserva_empleado($codigo_reserva);
+    $numero_viaje=parse_numero_viaje_empleado($numero_viaje);
+    $lugar_origen=parse_lugar_origen_llegada($lugar_origen);
+    $lugar_destino=parse_lugar_origen_llegada($lugar_destino);
+    $capacidad=parse_capacidad_empleado($capacidad);
+    $tiempo_estimado=parse_tiempo_estimado($tiempo_estimado);
+    $precio_asiento=parse_precio_asiento($precio_asiento);
+    $empresa=parse_empresa($empresa);
+    $escalas=parse_escalas($escalas);
+    $clase=parse_clase($clase);
+    $fecha_salida=parse_fecha($fecha_salida);
+    $fecha_llegada=parse_fecha($fecha_llegada);
+
+    array_push($key, $correo);
+    array_push($key, $codigo_reserva);
+
+    if($correo!==FALSE && $codigo_reserva!==FALSE && $numero_viaje!==FALSE && $lugar_origen!==FALSE
+    && $lugar_destino!==FALSE && $capacidad!==FALSE && $tiempo_estimado!==FALSE && $precio_asiento!==FALSE 
+    && $empresa!==FALSE && $escalas!==FALSE && $clase!==FALSE && $fecha_salida!==FALSE 
+    && $fecha_llegada!==FALSE && in_array($key, $key_avionesOK)!=TRUE){
+        array_push($key_avionesOK, $key);
+        array_push($arr_avionesOK, $correo); 
+        array_push($arr_avionesOK, $codigo_reserva);
+        array_push($arr_avionesOK, $numero_viaje);
+        array_push($arr_avionesOK, $lugar_origen);
+        array_push($arr_avionesOK, $lugar_destino);
+        array_push($arr_avionesOK, $capacidad);
+        array_push($arr_avionesOK, $tiempo_estimado);
+        array_push($arr_avionesOK, $precio_asiento);
+        array_push($arr_avionesOK, $empresa);
+        array_push($arr_avionesOK, $escalas);
+        array_push($arr_avionesOK, $clase);
+        array_push($arr_avionesOK, $fecha_salida);
+        array_push($arr_avionesOK, $fecha_llegada);
+        return $arr_avionesOK;
+    } else{
+        return FALSE;
+    }
+}
+
+
 ?>
 
