@@ -1020,6 +1020,9 @@
         <mxCell id="hxK-bMpqANBksW4O4nug-537" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="725" y="715.69" width="25" height="26" as="geometry" />
         </mxCell>
+        <mxCell id="hxK-bMpqANBksW4O4nug-538" value="Participan" style="rhombus;whiteSpace=wrap;html=1;labelBackgroundColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="242.60000000000002" y="890.5" width="65.76" height="33" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
