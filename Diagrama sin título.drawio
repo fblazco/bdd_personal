@@ -1110,6 +1110,9 @@
         <mxCell id="hxK-bMpqANBksW4O4nug-595" value="ComodidadesBus" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="1545.75" y="733.21" width="99.5" height="20.71" as="geometry" />
         </mxCell>
+        <mxCell id="hxK-bMpqANBksW4O4nug-596" value="Tiene" style="rhombus;whiteSpace=wrap;html=1;labelBackgroundColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1493" y="735" width="36" height="18.81" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
